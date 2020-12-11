@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const WebpackPwaManifest = require("webpack-pwa-manifest");
 
 // Create the main configuration object within our file
 // The options within this object tell webpack what to do
@@ -52,6 +53,27 @@ const config = {
       // Run BundleAnalyzer
       new BundleAnalyzerPlugin({
         analyzerMode: "static", // the report outputs to an HTML file in the dist folder
+      }),
+      // Run Webpack to Create Manifest
+      new WebpackPwaManifest({
+        name: "Food Event",
+        short_name: "Foodies",
+        description: "An app that allows you to view upcoming food events.",
+        // Specify the homepage for the PWA relative to the location of the manifest file
+        start_url: "../index.html",
+        background_color: "#01579b",
+        theme_color: "#ffffff",
+        // Specify that we do not want webpack to generate unique fingerprints each time a new manifest is created
+        fingerprints: false,
+        // Determines whether the link to the manifest is added to the HTML (we will hard code instead)
+        inject: false,
+        // App icon properties
+        icons: [{
+          src: path.resolve("assets/img/icons/icon-512x512.png"),
+          sizes: [96, 128, 192, 256, 384, 512],
+          // Designate where the icons will be sent after the creation of the web manifest
+          destination: path.join("assets", "icons")
+        }]
       })
     ],
     // The mode in which we want webpack to run (default: production mode)
